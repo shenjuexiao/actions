@@ -3,11 +3,11 @@
 # 20260801
 
 # 进入项目目录
-# cd Actions
+# cd actions
 
 # GITEE
-# git remote set-url --delete origin git@gitee.com:shenjuexiao/Actions.git
-# git remote set-url --add origin git@gitee.com:shenjuexiao/Actions.git
+git remote set-url --delete origin git@gitee.com:shenjuexiao/actions.git
+git remote set-url --add origin git@gitee.com:shenjuexiao/actions.git
 
 # 暂存所有更改
 git add .
