@@ -16,7 +16,7 @@ git add .
 git commit -m "$(date +%Y%m%d)"
 
 # 推送到远程 main 分支
-git push origin main
+git push -f origin main
 
 # 提示完成
 echo "✅ 执行完成！按任意键退出..."
