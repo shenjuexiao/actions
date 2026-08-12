@@ -1,6 +1,6 @@
 # .github/workflows/daily-commit-0.0.4.yml
 # github.com/shenjuexiao
-# 20260812
+# 20260807
 
 # chat.deepseek.com/a/chat/s/908a3126-2eef-4dcf-af9a-5eb9725d79a5
 # 设定 GitHub Actions 工作流 daily-commit.yml
@@ -24,8 +24,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          # token: ${{ secrets.GITHUB_TOKEN }}
-          token: ${{ secrets.ACTIONS }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Setup Git
         run: |
