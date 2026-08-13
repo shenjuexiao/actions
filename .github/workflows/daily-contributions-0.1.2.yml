@@ -1,6 +1,12 @@
-# daily-contributions-0.0.1.yml
+# daily-contributions-0.1.2.yml
 # github.com/shenjuexiao
 # 20260812
+
+# v0.0.0-20260723
+# chat.deepseek.com/a/chat/s/eb24f20e-abb9-4172-9785-5b5be59fcdce
+# Github Actions 自动化每天贡献，
+# 随机时间贡献1-6次，
+# 追加输出日期、时间、提交次数到仓库 README.md 文件中
 
 # v0.1.0-20260723
 # chat.deepseek.com/a/chat/s/e8004a03-61c8-4dc2-b519-48115132625f
@@ -8,9 +14,14 @@
 # 将日期、标准时间、北京时间，当日提交次数，
 # 追加内容到 README.md 文件中
 
-# v0.1.1-20260723
+# v0.1.1-20260801
 # chat.deepseek.com/a/chat/s/59ff5b0e-6234-4075-9591-87237830803a
 # heredoc 的结束标记 EOF 正确识别
+
+# v0.1.2-20260812
+# git config --global user.name
+# git config --global user.email
+
 
 name: Daily Random Contribution
 
@@ -37,7 +48,7 @@ jobs:
           # git config user.name "github-actions[bot]"
           git config --global user.name "shenjuexiao"
           # git config user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.email "60324485+shenjuexiao@users.noreply.github.com"
+          git config --global user.email "shenjuexiao@qq.com"
           
       - name: Generate random time and contribute
         run: |
