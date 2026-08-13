@@ -22,7 +22,6 @@
 # git config --global user.name
 # git config --global user.email
 
-
 name: Daily Random Contribution
 
 on:
@@ -40,8 +39,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          # token: ${{ secrets.GITHUB_TOKEN }}
-          token: ${{ secrets.ACTIONS }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Setup Git
         run: |
