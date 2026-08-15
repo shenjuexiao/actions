@@ -1,6 +1,6 @@
-# .github/workflows/daily-commit-0.0.4.yml
+# daily-commit-0.0.4.yml
 # github.com/shenjuexiao
-# 20260807
+# 20260815
 
 # v0.0.0-20260807
 # chat.deepseek.com/a/chat/s/fa86cd0e-7489-4d70-bab3-fc9674dd979a
@@ -26,7 +26,8 @@
 # 每日0点、8点、16点，随机提交0-3次，记录到 daily-log.txt
 # 格式：提交时间 | 随机数 | 计划次数 | 执行次数
 
-name: Daily Commit
+# .github/workflows/daily-commit-0.0.4.yml
+name: daily-commit
 
 on:
   schedule:
