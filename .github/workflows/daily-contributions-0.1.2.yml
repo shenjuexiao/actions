@@ -54,8 +54,7 @@ jobs:
           # 生成随机延迟时间（1-23小时之间）
           RANDOM_DELAY=$((RANDOM % 23 + 1))
           echo "将在 $RANDOM_DELAY 小时后执行提交..."
-          # sleep $((RANDOM_DELAY * 60))
-          sleep $((RANDOM_DELAY))
+          sleep $((RANDOM_DELAY * 60))
 
           # 随机决定提交次数（1或2次）
           COMMIT_COUNT=$((RANDOM % 2 + 1))
