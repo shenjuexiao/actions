@@ -1,6 +1,6 @@
 # daily-contributions-0.1.2.yml
 # github.com/shenjuexiao
-# 20260812
+# 20260815
 
 # v0.0.0-20260723
 # chat.deepseek.com/a/chat/s/eb24f20e-abb9-4172-9785-5b5be59fcdce
@@ -22,7 +22,8 @@
 # git config --global user.name
 # git config --global user.email
 
-name: Daily Random Contribution
+# .github/workflows/daily-contributions-0.1.2.yml
+name: daily-contributions
 
 on:
   schedule:
