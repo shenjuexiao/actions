@@ -1,0 +1,146 @@
+# daily-contributions-0.2.0.yml
+# github.com/shenjuexiao
+# 20260917
+
+# .github/workflows/daily-contributions.yml
+name: daily-contributions
+
+on:
+  schedule:
+    # 一天多个时间点触发（UTC），覆盖全天，近似“随机小时”
+    # 北京时间 = UTC + 8，下面大致对应北京时间 0/3/6/9/12/15/18/21 点
+    - cron: '0 16 * * *'
+    - cron: '0 19 * * *'
+    - cron: '0 22 * * *'
+    - cron: '0 1 * * *'
+    - cron: '0 4 * * *'
+    - cron: '0 7 * * *'
+    - cron: '0 10 * * *'
+    - cron: '0 13 * * *'
+  # 允许手动触发
+  workflow_dispatch:
+    inputs:
+      force:
+        description: '强制提交（忽略随机判断）'
+        required: false
+        default: 'false'
+
+# 保证同一时间只有一个该 workflow 在跑，避免并发 push 冲突
+concurrency:
+  group: daily-contributions
+  cancel-in-progress: false
+
+jobs:
+  contribute:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Git
+        run: |
+          git config --global user.name "shenjuexiao"
+          git config --global user.email "60324485+shenjuexiao@users.noreply.github.com"
+
+      - name: Random delay within this slot
+        id: decide
+        run: |
+          # 本次触发是否真的提交：约 50% 概率
+          ROLL=$((RANDOM % 100))
+          if [ "${{ github.event.inputs.force }}" = "true" ]; then
+            DO_COMMIT=true
+          elif [ $ROLL -lt 50 ]; then
+            DO_COMMIT=true
+          else
+            DO_COMMIT=false
+          fi
+          echo "DO_COMMIT=$DO_COMMIT" >> $GITHUB_ENV
+          echo "随机值=$ROLL，本次是否提交=$DO_COMMIT"
+
+          # 在本次 slot 内再随机等 0-60 分钟，让提交时刻更分散（单次很短，不会超时）
+          if [ "$DO_COMMIT" = "true" ]; then
+            SLOT_DELAY=$((RANDOM % 60))
+            echo "本次 slot 内随机延迟 $SLOT_DELAY 分钟..."
+            sleep $((SLOT_DELAY * 60))
+          fi
+
+      - name: Commit and push
+        if: env.DO_COMMIT == 'true'
+        run: |
+          # 随机决定提交次数（1 或 2 次）
+          COMMIT_COUNT=$((RANDOM % 2 + 1))
+          echo "COMMIT_COUNT=$COMMIT_COUNT" >> $GITHUB_ENV
+          echo "开始执行 $COMMIT_COUNT 次提交..."
+
+          for i in $(seq 1 $COMMIT_COUNT); do
+            # 两次提交之间间隔随机时间（5-20 分钟，避免单 job 太久）
+            if [ $i -gt 1 ]; then
+              SLEEP_TIME=$((RANDOM % 16 + 5))
+              echo "等待 $SLEEP_TIME 分钟后进行第 $i 次提交..."
+              sleep $((SLEEP_TIME * 60))
+            fi
+
+            CURRENT_DATE=$(date '+%Y-%m-%d')
+            UTC_TIME=$(date -u '+%H:%M:%S')
+            BEIJING_TIME=$(TZ='Asia/Shanghai' date '+%H:%M:%S')
+            TIMESTAMP=$(date '+%Y%m%d_%H%M%S')
+
+            if [ ! -f README.md ]; then
+              echo "# 贡献记录" > README.md
+              echo "" >> README.md
+              echo "## 📊 自动化贡献日志" >> README.md
+              echo "" >> README.md
+            fi
+
+            if [ -s README.md ]; then
+              echo "" >> README.md
+            fi
+
+            echo "---" >> README.md
+            echo "### 🕐 贡献 #$(date '+%Y%m%d%H%M%S')" >> README.md
+            echo "- **📅 日期**: $CURRENT_DATE" >> README.md
+            echo "- **🕐 标准时间 (UTC)**: $UTC_TIME" >> README.md
+            echo "- **🕐 北京时间**: $BEIJING_TIME" >> README.md
+            echo "- **📊 本次提交数**: $COMMIT_COUNT" >> README.md
+            echo "- **🔢 当前提交**: $i / $COMMIT_COUNT" >> README.md
+            echo "- **⏰ 时间戳**: $TIMESTAMP" >> README.md
+            echo "" >> README.md
+
+            git add README.md
+            git commit -m "📝 Daily contribution $i/$COMMIT_COUNT [${TIMESTAMP}]"
+
+            # 先 rebase 再 push，带重试
+            pushed=false
+            for attempt in 1 2 3 4 5; do
+              echo "🔄 尝试推送 (第 $attempt 次)..."
+              if git pull --rebase origin main && git push origin main; then
+                pushed=true
+                break
+              fi
+              echo "⚠️ 推送失败，10 秒后重试..."
+              git rebase --abort 2>/dev/null || true
+              sleep 10
+            done
+
+            if [ "$pushed" != "true" ]; then
+              echo "❌ 推送失败，已重试 5 次，退出"
+              exit 1
+            fi
+
+            echo "✅ 第 $i 次提交完成"
+          done
+
+      - name: Skip notice
+        if: env.DO_COMMIT != 'true'
+        run: echo "🎲 本次随机判定为不提交，跳过。"
+
+      - name: Final status
+        if: env.DO_COMMIT == 'true'
+        run: |
+          echo "## 🎉 本次贡献完成！"
+          echo "- 提交次数: ${{ env.COMMIT_COUNT }}"
+          echo "- 执行时间: $(date '+%Y-%m-%d %H:%M:%S')"
