@@ -2,31 +2,7 @@
 # github.com/shenjuexiao
 # 20260815
 
-# v0.0.0-20260807
-# chat.deepseek.com/a/chat/s/fa86cd0e-7489-4d70-bab3-fc9674dd979a
-# 设定 GitHub Actions 工作流 daily-commit.yml，每日提交1次，记录提交次数、提交时间到 daily-log.txt
-
-# v0.0.1-20260807
-# chat.deepseek.com/a/chat/s/c816824e-8c2e-4cdd-8bb5-565947ac3cea
-# 设定 GitHub Actions 工作流 daily-commit.yml，每日0点、8点、16点，随机提交0-3次，记录提交次数、提交时间到 daily-log.txt
-
-# v0.0.2-20260807
-# chat.deepseek.com/a/chat/s/ecc39025-eadd-4a30-b16e-df8fca679cb9
-# 设定 GitHub Actions 工作流 daily-commit.yml，每日0点、8点、16点，随机提交0-3次，记录当日提交次数、提交时间到 daily-log.txt
-
-# v0.0.3-20260807
-# chat.deepseek.com/a/chat/s/ab44c809-3ba6-41dc-b84e-14f6accdcd2a
-# 设定 GitHub Actions 工作流 daily-commit.yml
-# 每日0点、8点、16点，随机提交0-3次，记录到 daily-log.txt
-# 格式：提交时间 | 当日提交次数 | 随机数
-
-# v0.0.4-20260807
-# chat.deepseek.com/a/chat/s/908a3126-2eef-4dcf-af9a-5eb9725d79a5
-# 设定 GitHub Actions 工作流 daily-commit.yml
-# 每日0点、8点、16点，随机提交0-3次，记录到 daily-log.txt
-# 格式：提交时间 | 随机数 | 计划次数 | 执行次数
-
-# .github/workflows/daily-commit-0.0.4.yml
+# .github/workflows/daily-commit.yml
 name: daily-commit
 
 on:
