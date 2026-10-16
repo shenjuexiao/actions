@@ -1,0 +1,54 @@
+# Yikun-hub-mirror-action.yml
+# github.com/shenjuexiao
+# 20261016
+
+# 20261016
+# 编写：Yikun-hub-mirror-action.yml
+# name: Single repo mirror
+# uses: Yikun/hub-mirror-action@master
+# with:
+# src: github/shenjuexiao
+# dst: gitee/shenjuexiao
+# dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
+# dst_token: ${{ secrets.GITEE_TOKEN }}
+# static_list: "actions"
+
+# .github/workflows/Yikun-hub-mirror-action.yml
+# 工作流名称：单仓库镜像
+name: Single repo mirror
+
+# 触发条件：在 push 到任意分支时运行，也可以手动触发
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+# 定义任务
+jobs:
+  mirror:
+    # 使用最新的 Ubuntu 运行器
+    runs-on: ubuntu-latest
+
+    steps:
+      # 步骤1：检出当前仓库代码（可选，但通常建议保留）
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 步骤2：使用 Yikun/hub-mirror-action 执行镜像
+      - name: Mirror to Gitee
+        uses: Yikun/hub-mirror-action@master
+        with:
+          # 源仓库：GitHub 上的 shenjuexiao 用户
+          src: github/shenjuexiao
+          # 目标仓库：Gitee 上的 shenjuexiao 用户
+          dst: gitee/shenjuexiao
+          # 目标平台的 SSH 私钥，用于推送代码（在仓库 Secrets 中设置 GITEE_PRIVATE_KEY）
+          dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
+          # 目标平台的访问令牌，用于创建仓库等操作（在仓库 Secrets 中设置 GITEE_TOKEN）
+          dst_token: ${{ secrets.GITEE_TOKEN }}
+          # 静态仓库列表：只镜像名为 "actions" 的仓库
+          static_list: "actions"
+          # 可选：强制覆盖目标仓库的更新（根据需求调整）
+          # force_update: true
+          # 可选：是否镜像 wiki 和 issues（默认 false）
+          # clone_style: "https"
