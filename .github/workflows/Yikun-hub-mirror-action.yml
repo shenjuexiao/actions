@@ -47,7 +47,7 @@ jobs:
           # 目标平台的访问令牌，用于创建仓库等操作（在仓库 Secrets 中设置 GITEE_TOKEN）
           dst_token: ${{ secrets.GITEE_TOKEN }}
           # 如果源端需要认证（如组织或私有仓库），请配置 src_token
-          src_token: ${{ secrets.GITHUB_TOKEN }}
+          # src_token: ${{ secrets.GITHUB_TOKEN }}
           # 静态仓库列表：只镜像名为 "actions" 的仓库
           static_list: "actions"
           # 可选：强制覆盖目标仓库的更新（根据需求调整）
