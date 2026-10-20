@@ -1,6 +1,6 @@
-# daily-commit-0.0.4.yml
+# daily-commit-0.0.5.yml
 # github.com/shenjuexiao
-# 20260815
+# 20261021
 
 # .github/workflows/daily-commit.yml
 name: daily-commit
@@ -15,63 +15,57 @@ on:
 jobs:
   commit:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: Setup Git
         run: |
-          # git config --global user.name "github-actions[bot]"
           git config --global user.name "shenjuexiao"
-          # git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git config --global user.email "shenjuexiao@qq.com"
-          
+          git config --global user.email "60324485+shenjuexiao@users.noreply.github.com"
+
       - name: Generate random commits
         run: |
           # 生成0-3之间的随机数
           RANDOM_NUM=$(($RANDOM % 4))
-          
-          # 根据随机数决定提交次数
-          if [ $RANDOM_NUM -eq 0 ]; then
-            COMMIT_COUNT=0
-          elif [ $RANDOM_NUM -eq 1 ]; then
-            COMMIT_COUNT=1
-          elif [ $RANDOM_NUM -eq 2 ]; then
-            COMMIT_COUNT=2
-          else
-            COMMIT_COUNT=3
-          fi
-          
-          # 记录执行信息
+          COMMIT_COUNT=$RANDOM_NUM   # 0~3 直接就是提交次数
+
           CURRENT_TIME=$(date '+%Y-%m-%d %H:%M:%S')
-          echo "${CURRENT_TIME} | 随机数: ${RANDOM_NUM} | 计划次数: ${COMMIT_COUNT} | 执行次数: " >> daily-log.txt
-          
-          # 执行提交
+
+          # 先执行提交，边提交边把随机内容收集到临时文件
           ACTUAL_COUNT=0
+          : > /tmp/commit_lines.txt
           for i in $(seq 1 $COMMIT_COUNT); do
-            # 生成随机内容
             RANDOM_CONTENT="Random commit #${i} at $(date '+%Y-%m-%d %H:%M:%S') - RANDOM: $(($RANDOM % 10000))"
-            
-            # 追加到日志文件
-            echo "${RANDOM_CONTENT}" >> daily-log.txt
-            
-            # 提交更改
-            git add daily-log.txt
+            echo "- ${RANDOM_CONTENT}" >> /tmp/commit_lines.txt
+
+            git add daily-commit.md 2>/dev/null || true
+            # 先把内容追加进文件再提交
+            echo "- ${RANDOM_CONTENT}" >> daily-commit.md
+            git add daily-commit.md
             git commit -m "Daily commit #${i} - $(date '+%Y-%m-%d %H:%M:%S')"
-            
+
             ACTUAL_COUNT=$((ACTUAL_COUNT + 1))
           done
-          
-          # 更新执行次数
-          sed -i "s/| 执行次数: $/| 执行次数: ${ACTUAL_COUNT}/" daily-log.txt
-          
-          # 推送更改
+
+          # 统一写入摘要（三级标题一行，上方空一行），再拼接随机内容
+          {
+            echo ""
+            echo "### 🕐 ${CURRENT_TIME} | 随机数: ${RANDOM_NUM} | 计划次数: ${COMMIT_COUNT} | 执行次数: ${ACTUAL_COUNT}"
+            cat /tmp/commit_lines.txt
+          } >> daily-commit.md
+
+          git add daily-commit.md
+          # 若本轮没有提交（ACTUAL_COUNT=0），这里仍会产生一次“汇总”提交；
+          # 如需 0 次时完全不提交，可加判断：
+          # if [ "$ACTUAL_COUNT" -eq 0 ]; then exit 0; fi
+          git commit -m "Daily summary - $(date '+%Y-%m-%d %H:%M:%S')" || echo "nothing to commit"
           git push origin main
-          
+
       - name: Display result
         run: |
           echo "=== 最新提交记录 ==="
-          tail -n 10 daily-log.txt
+          tail -n 10 daily-commit.md

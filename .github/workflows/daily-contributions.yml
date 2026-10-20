@@ -1,6 +1,6 @@
-# daily-contributions-0.2.0.yml
+# daily-contributions-0.2.1.yml
 # github.com/shenjuexiao
-# 20260917
+# 20261021
 
 # .github/workflows/daily-contributions.yml
 name: daily-contributions
@@ -89,28 +89,30 @@ jobs:
             BEIJING_TIME=$(TZ='Asia/Shanghai' date '+%H:%M:%S')
             TIMESTAMP=$(date '+%Y%m%d_%H%M%S')
 
-            if [ ! -f README.md ]; then
-              echo "# 贡献记录" > README.md
-              echo "" >> README.md
-              echo "## 📊 自动化贡献日志" >> README.md
-              echo "" >> README.md
+            if [ ! -f daily-contributions.md ]; then
+              echo "# daily-contributions.md" > daily-contributions.md
+              echo "" >> daily-contributions.md
+              echo "# 贡献记录" > daily-contributions.md
+              echo "" >> daily-contributions.md
+              echo "## 📊 自动化贡献日志" >> daily-contributions.md
+              echo "" >> daily-contributions.md
             fi
 
-            if [ -s README.md ]; then
-              echo "" >> README.md
-            fi
+            # if [ -s daily-contributions.md ]; then
+              # echo "" >> daily-contributions.md
+            # fi
 
-            echo "---" >> README.md
-            echo "### 🕐 贡献 #$(date '+%Y%m%d%H%M%S')" >> README.md
-            echo "- **📅 日期**: $CURRENT_DATE" >> README.md
-            echo "- **🕐 标准时间 (UTC)**: $UTC_TIME" >> README.md
-            echo "- **🕐 北京时间**: $BEIJING_TIME" >> README.md
-            echo "- **📊 本次提交数**: $COMMIT_COUNT" >> README.md
-            echo "- **🔢 当前提交**: $i / $COMMIT_COUNT" >> README.md
-            echo "- **⏰ 时间戳**: $TIMESTAMP" >> README.md
-            echo "" >> README.md
+            echo "---" >> daily-contributions.md
+            echo "### 🕐 贡献 #$(date '+%Y%m%d%H%M%S')" >> daily-contributions.md
+            echo "- **📅 日期**: $CURRENT_DATE" >> daily-contributions.md
+            echo "- **🕐 标准时间 (UTC)**: $UTC_TIME" >> daily-contributions.md
+            echo "- **🕐 北京时间**: $BEIJING_TIME" >> daily-contributions.md
+            echo "- **📊 本次提交数**: $COMMIT_COUNT" >> daily-contributions.md
+            echo "- **🔢 当前提交**: $i / $COMMIT_COUNT" >> daily-contributions.md
+            echo "- **⏰ 时间戳**: $TIMESTAMP" >> daily-contributions.md
+            echo "" >> daily-contributions.md
 
-            git add README.md
+            git add daily-contributions.md
             git commit -m "📝 Daily contribution $i/$COMMIT_COUNT [${TIMESTAMP}]"
 
             # 先 rebase 再 push，带重试
