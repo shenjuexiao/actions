@@ -92,7 +92,7 @@ jobs:
             if [ ! -f daily-contributions.md ]; then
               echo "# daily-contributions.md" > daily-contributions.md
               echo "" >> daily-contributions.md
-              echo "# 贡献记录" > daily-contributions.md
+              echo "# 贡献记录" >> daily-contributions.md
               echo "" >> daily-contributions.md
               echo "## 📊 自动化贡献日志" >> daily-contributions.md
               echo "" >> daily-contributions.md
